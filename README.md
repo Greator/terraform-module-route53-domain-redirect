@@ -8,6 +8,31 @@ Both www and apex A records are created and pointed to a CloudFront distribution
 
 **Requirements:** DNS Zone in Route53
 
+## Example
+
+```bash
+provider "aws" {
+  alias   = "ec1"
+  region  = "eu-central-1"
+}
+
+provider "aws" {
+  alias   = "ue1"
+  region  = "us-east-1"
+}
+
+module "redirect-my-page" {
+  source = "../terraform-module-route53-domain-redirect"
+  providers = {
+    aws     = aws.ec1
+    aws.acm = aws.ue1
+  }
+
+  target_url = "example.com/my-page/"
+  zone       = "my-page.com"
+}
+```
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
