@@ -43,10 +43,6 @@ resource "aws_cloudfront_distribution" "redirect" {
       }
     }
 
-    viewer_protocol_policy = "https-only"
-  }
-
-  ordered_cache_behavior {
     viewer_protocol_policy = "redirect-to-https"
   }
 
