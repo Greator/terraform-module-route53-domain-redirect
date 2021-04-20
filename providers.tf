@@ -11,5 +11,5 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "acm"
+  alias = "acm"
 }

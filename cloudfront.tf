@@ -1,3 +1,4 @@
+#tfsec:ignore:AWS045 tfsec:ignore:AWS071
 resource "aws_cloudfront_distribution" "redirect" {
   origin {
     domain_name = "${aws_s3_bucket.redirect_bucket.bucket}.s3-website.${data.aws_region.current.name}.amazonaws.com"
@@ -42,12 +43,17 @@ resource "aws_cloudfront_distribution" "redirect" {
       }
     }
 
-    viewer_protocol_policy = "allow-all"
+    viewer_protocol_policy = "https-only"
+  }
+
+  ordered_cache_behavior {
+    viewer_protocol_policy = "redirect-to-https"
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate.cert.arn
-    ssl_support_method  = "sni-only"
+    acm_certificate_arn      = aws_acm_certificate.cert.arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2019"
   }
 
   wait_for_deployment = false
